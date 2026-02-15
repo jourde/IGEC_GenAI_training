@@ -1,116 +1,141 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IGEC | Lab de Prompt Avancé</title>
+    <title>IGEC | Professional Prompt Engineering Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #37474f;
+            --primary: #37474f; /* Deep Grey 800 */
             --accent: #263238;
             --bg: #f4f7f9;
             --surface: #ffffff;
             --border: #cfd8dc;
             --radius: 12px;
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --text-main: #1c1b1f;
+            --text-secondary: #607d8b;
         }
 
         body, html {
             height: 100%; margin: 0;
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg);
-            color: #1c1b1f;
+            color: var(--text-main);
         }
 
-        /* Layout Principal */
         .app-wrapper {
             display: flex; flex-direction: column; height: 100vh;
         }
 
         header {
             background: var(--primary); color: white;
-            padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 2.5rem; display: flex; justify-content: space-between; align-items: center;
             box-shadow: var(--shadow);
         }
 
         .main-content {
-            display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
+            display: flex; flex: 1; overflow: hidden; padding: 25px; gap: 25px;
         }
 
-        /* Panneau de Saisie */
-        .editor-panel {
-            flex: 1; overflow-y: auto; background: var(--surface);
-            border-radius: var(--radius); padding: 25px; box-shadow: var(--shadow);
-        }
-
-        /* Panneau de Preview (Live) */
-        .preview-panel {
+        /* Unified Panel Styles */
+        .editor-panel, .preview-panel {
             flex: 1; display: flex; flex-direction: column;
-            background: #263238; color: #eceff1;
-            border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+            background: var(--surface);
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
         }
 
-        .preview-header {
-            background: #1c262b; padding: 15px 20px;
+        .panel-scroll {
+            flex: 1; overflow-y: auto; padding: 25px;
+        }
+
+        .panel-header {
+            background: #fafafa;
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
-            font-weight: 500; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
+            font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;
+            color: var(--primary);
         }
 
-        .preview-body {
-            flex: 1; padding: 30px; overflow-y: auto;
-            font-family: 'Fira Code', monospace; font-size: 0.95rem; line-height: 1.6;
-            white-space: pre-wrap; color: #81d4fa;
-        }
-
-        /* Formulaire */
+        /* Form Styling */
         .field-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
         }
 
         label { font-weight: 700; color: var(--primary); font-size: 0.9rem; }
         
-        .hint { font-size: 0.8rem; color: #607d8b; margin-bottom: 10px; display: block; }
+        .hint { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; display: block; line-height: 1.4; }
 
-        .input-container { position: relative; margin-bottom: 25px; }
+        .input-container { position: relative; margin-bottom: 28px; }
 
         textarea {
             width: 100%; border: 1px solid var(--border); border-radius: 8px;
-            padding: 12px; font-size: 1rem; font-family: inherit;
-            resize: vertical; min-height: 80px; box-sizing: border-box;
-            transition: all 0.2s;
+            padding: 14px; font-size: 1rem; font-family: inherit;
+            resize: vertical; min-height: 90px; box-sizing: border-box;
+            transition: all 0.2s; background-color: #fff;
         }
 
-        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(55, 71, 79, 0.1); }
+        textarea:focus { outline: none; border: 2px solid var(--primary); box-shadow: 0 0 0 4px rgba(55, 71, 79, 0.05); }
 
-        /* Mode Plein Écran */
+        .lazy-prompt { background-color: #fdfdfd; border: 1px dashed var(--border); }
+
+        /* Fullscreen Mode */
         .fullscreen-btn {
             background: none; border: none; cursor: pointer; color: var(--primary);
-            padding: 5px; border-radius: 4px; display: flex; align-items: center; opacity: 0.6;
+            padding: 5px; border-radius: 4px; display: flex; align-items: center; opacity: 0.5; transition: 0.2s;
         }
-        .fullscreen-btn:hover { opacity: 1; background: #eee; }
+        .fullscreen-btn:hover { opacity: 1; background: #eceff1; }
 
         textarea.fullscreen-active {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 9999; border-radius: 0; padding: 40px; font-size: 1.2rem;
+            z-index: 9999; border-radius: 0; padding: 50px; font-size: 1.25rem;
+            background: white; line-height: 1.6;
         }
 
-        /* Boutons d'Action */
-        .actions { display: flex; gap: 10px; padding: 15px 20px; background: #1c262b; }
+        /* Live Preview Styling */
+        .preview-body {
+            font-family: 'Fira Code', monospace; 
+            font-size: 1rem; 
+            line-height: 1.7;
+            white-space: pre-wrap; 
+            color: #334155;
+            background: #ffffff;
+            border: 1px solid #edf2f7;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .tag-h1 { color: #e65100; font-weight: bold; border-bottom: 2px solid #ffccbc; padding-bottom: 2px; }
+
+        /* Actions */
+        .actions { display: flex; gap: 12px; padding: 20px 25px; background: #fafafa; border-top: 1px solid var(--border); }
         
         .btn {
-            flex: 1; padding: 12px; border-radius: 6px; border: none;
-            font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.85rem;
+            flex: 1; padding: 14px; border-radius: 8px; border: none;
+            font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
-        .btn-copy { background: #00bcd4; color: white; }
-        .btn-download { background: #607d8b; color: white; }
-        .btn-reset { background: #cfd8dc; color: #37474f; flex: 0.3; }
+        .btn-copy { background: var(--primary); color: white; }
+        .btn-download { background: #546e7a; color: white; }
+        .btn-reset { background: transparent; color: #b0bec5; border: 1px solid #cfd8dc; flex: 0.4; }
 
-        .btn:hover { filter: brightness(1.1); }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
+        .btn-reset:hover { border-color: #90a4ae; color: #607d8b; }
 
-        .tag-h1 { color: #ffab40; font-weight: bold; }
+        #save-status { font-weight: 400; text-transform: none; color: #4caf50; font-size: 0.75rem; }
 
+        hr { border: 0; border-top: 1px solid #eceff1; margin: 35px 0; }
+
+        @media (max-width: 900px) {
+            .main-content { flex-direction: column; overflow-y: auto; }
+            .editor-panel, .preview-panel { min-height: 600px; }
+        }
     </style>
 </head>
 <body>
@@ -118,78 +143,84 @@
 <div class="app-wrapper">
     <header>
         <div>
-            <h1 style="margin:0; font-size: 1.4rem;">IGEC Prompt Lab</h1>
-            <span style="font-size: 0.8rem; opacity: 0.8;">Ingénierie de prompt pour l'inspection générale</span>
+            <h1 style="margin:0; font-size: 1.5rem; letter-spacing: -0.5px;">IGEC Prompt Lab</h1>
+            <span style="font-size: 0.85rem; opacity: 0.9;">Professional Framework for Education Inspectorate</span>
         </div>
-        <button class="btn btn-reset" onclick="resetForm()">Réinitialiser</button>
+        <button class="btn btn-reset" onclick="resetForm()">Clear Data</button>
     </header>
 
     <main class="main-content">
         <div class="editor-panel">
-            <div class="input-container">
-                <div class="field-header">
-                    <label>Brouillon Initial</label>
+            <div class="panel-header">Input Builder</div>
+            <div class="panel-scroll">
+                <div class="input-container">
+                    <div class="field-header">
+                        <label>Initial Request (Draft)</label>
+                    </div>
+                    <span class="hint">Your raw idea. Example: "Write a report on school safety."</span>
+                    <textarea id="draft" class="lazy-prompt" placeholder="Type or paste your initial idea here..."></textarea>
                 </div>
-                <textarea id="draft" class="lazy-prompt" placeholder="Ex: Rédige un rapport sur la sécurité..."></textarea>
-            </div>
 
-            <hr style="border:0; border-top:1px solid #eee; margin: 30px 0;">
+                <hr>
 
-            <div class="input-container">
-                <div class="field-header">
-                    <label># PERSONA</label>
-                    <button class="fullscreen-btn" onclick="toggleFS('persona')" title="Plein écran">⛶</button>
+                <div class="input-container">
+                    <div class="field-header">
+                        <label># PERSONA</label>
+                        <button class="fullscreen-btn" onclick="toggleFS('persona')" title="Fullscreen Mode">⛶</button>
+                    </div>
+                    <span class="hint">Role (e.g., Senior Audit Expert with expertise in Administrative Law).</span>
+                    <textarea id="persona" placeholder="Act as a..."></textarea>
                 </div>
-                <span class="hint">Rôle de l'IA (ex: Inspecteur senior technique).</span>
-                <textarea id="persona" placeholder="Agis en tant que..."></textarea>
-            </div>
 
-            <div class="input-container">
-                <div class="field-header">
-                    <label># CONTEXTE</label>
-                    <button class="fullscreen-btn" onclick="toggleFS('context')" title="Plein écran">⛶</button>
+                <div class="input-container">
+                    <div class="field-header">
+                        <label># CONTEXT</label>
+                        <button class="fullscreen-btn" onclick="toggleFS('context')" title="Fullscreen Mode">⛶</button>
+                    </div>
+                    <span class="hint">Background details (e.g., Decree-Law 54/2018, specific complaints).</span>
+                    <textarea id="context" placeholder="This task arises from..."></textarea>
                 </div>
-                <span class="hint">Cadre, plaintes, ou législation (Décret-loi...).</span>
-                <textarea id="context" placeholder="Ce travail s'inscrit dans..."></textarea>
-            </div>
 
-            <div class="input-container">
-                <div class="field-header">
-                    <label># OBJECTIF</label>
-                    <button class="fullscreen-btn" onclick="toggleFS('objective')" title="Plein écran">⛶</button>
+                <div class="input-container">
+                    <div class="field-header">
+                        <label># OBJECTIVE</label>
+                        <button class="fullscreen-btn" onclick="toggleFS('objective')" title="Fullscreen Mode">⛶</button>
+                    </div>
+                    <span class="hint">Exact action or outcome desired.</span>
+                    <textarea id="objective" placeholder="The main goal is to..."></textarea>
                 </div>
-                <span class="hint">Action précise attendue.</span>
-                <textarea id="objective" placeholder="L'objectif est de..."></textarea>
-            </div>
 
-            <div class="input-container">
-                <div class="field-header">
-                    <label># AUDIENCE</label>
-                    <button class="fullscreen-btn" onclick="toggleFS('audience')" title="Plein écran">⛶</button>
+                <div class="input-container">
+                    <div class="field-header">
+                        <label># AUDIENCE</label>
+                        <button class="fullscreen-btn" onclick="toggleFS('audience')" title="Fullscreen Mode">⛶</button>
+                    </div>
+                    <span class="hint">Who is reading the output? (e.g., School Board of Directors).</span>
+                    <textarea id="audience" placeholder="The target audience is..."></textarea>
                 </div>
-                <span class="hint">Qui va lire ce document ?</span>
-                <textarea id="audience" placeholder="Le document s'adresse à..."></textarea>
-            </div>
 
-            <div class="input-container">
-                <div class="field-header">
-                    <label># LIMITES & STYLE</label>
-                    <button class="fullscreen-btn" onclick="toggleFS('boundaries')" title="Plein écran">⛶</button>
+                <div class="input-container">
+                    <div class="field-header">
+                        <label># BOUNDARIES & STYLE</label>
+                        <button class="fullscreen-btn" onclick="toggleFS('boundaries')" title="Fullscreen Mode">⛶</button>
+                    </div>
+                    <span class="hint">Format, tone, length, or constraints (e.g., technical tone, max 2 pages).</span>
+                    <textarea id="boundaries" placeholder="Ensure the response is..."></textarea>
                 </div>
-                <span class="hint">Format, ton, longueur, citations.</span>
-                <textarea id="boundaries" placeholder="Le ton doit être..."></textarea>
             </div>
         </div>
 
         <div class="preview-panel">
-            <div class="preview-header">
-                Aperçu du Master Prompt (Markdown H1)
-                <span id="save-status" style="font-size: 0.7rem; color: #4caf50;">Enregistré localement</span>
+            <div class="panel-header">
+                Live Master Prompt Preview
+                <span id="save-status">Saved</span>
             </div>
-            <div id="preview-body" class="preview-body"></div>
+            <div class="panel-scroll" style="background-color: #fcfcfc;">
+                <div id="preview-body" class="preview-body"></div>
+            </div>
             <div class="actions">
-                <button class="btn btn-copy" onclick="copyToClipboard()">Copier le Prompt</button>
-                <button class="btn btn-download" onclick="downloadPrompt()">Exporter (.md)</button>
+                <button class="btn btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
+                <button class="btn btn-download" onclick="downloadPrompt()">Export .md</button>
             </div>
         </div>
     </main>
@@ -198,14 +229,11 @@
 <script>
     const fields = ['draft', 'persona', 'context', 'objective', 'audience', 'boundaries'];
     
-    // Initialisation
     window.onload = () => {
         fields.forEach(id => {
-            // Charger depuis LocalStorage
-            const saved = localStorage.getItem('igec_' + id);
+            const saved = localStorage.getItem('igec_en_' + id);
             if (saved) document.getElementById(id).value = saved;
 
-            // Ecouteur pour Live Preview et Save
             document.getElementById(id).addEventListener('input', () => {
                 updatePreview();
                 saveLocal(id);
@@ -215,23 +243,30 @@
     };
 
     function updatePreview() {
-        const p = document.getElementById('persona').value || "...";
-        const c = document.getElementById('context').value || "...";
-        const o = document.getElementById('objective').value || "...";
-        const a = document.getElementById('audience').value || "...";
-        const b = document.getElementById('boundaries').value || "...";
+        const p = document.getElementById('persona').value || "(Persona not defined)";
+        const c = document.getElementById('context').value || "(Context not defined)";
+        const o = document.getElementById('objective').value || "(Objective not defined)";
+        const a = document.getElementById('audience').value || "(Audience not defined)";
+        const b = document.getElementById('boundaries').value || "(Boundaries not defined)";
 
-        const template = `# PERSONA\n${p}\n\n# CONTEXTE\n${c}\n\n# OBJECTIVE\n${o}\n\n# AUDIENCE\n${a}\n\n# LIMITES & STYLE\n${b}`;
+        const template = `# PERSONA\n${p}\n\n# CONTEXT\n${c}\n\n# OBJECTIVE\n${o}\n\n# AUDIENCE\n${a}\n\n# BOUNDARIES & STYLE\n${b}`;
         
-        // Coloration syntaxique simple pour le titre
-        const highlighted = template.replace(/(# [A-ZÀ-Ÿ &]+)/g, '<span class="tag-h1">$1</span>');
+        // Visual highlighting for H1 headers
+        const highlighted = template.replace(/(# [A-Z &]+)/g, '<span class="tag-h1">$1</span>');
         document.getElementById('preview-body').innerHTML = highlighted;
     }
 
     function saveLocal(id) {
-        localStorage.setItem('igec_' + id, document.getElementById(id).value);
-        document.getElementById('save-status').innerText = "Enregistrement...";
-        setTimeout(() => { document.getElementById('save-status').innerText = "Sauvegardé auto."; }, 800);
+        localStorage.setItem('igec_en_' + id, document.getElementById(id).value);
+        const status = document.getElementById('save-status');
+        status.innerText = "Syncing...";
+        status.style.color = "#ffa000";
+        
+        clearTimeout(window.saveTimer);
+        window.saveTimer = setTimeout(() => { 
+            status.innerText = "Saved to browser"; 
+            status.style.color = "#4caf50";
+        }, 1000);
     }
 
     function toggleFS(id) {
@@ -239,14 +274,18 @@
         el.classList.toggle('fullscreen-active');
         if(el.classList.contains('fullscreen-active')) {
             el.focus();
-            // Quitter avec Echap
             el.onkeydown = (e) => { if(e.key === "Escape") toggleFS(id); };
         }
     }
 
     function copyToClipboard() {
         const text = document.getElementById('preview-body').innerText;
-        navigator.clipboard.writeText(text).then(() => alert("Prompt copié dans le presse-papier !"));
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.btn-copy');
+            const originalText = btn.innerText;
+            btn.innerText = "✓ Copied!";
+            setTimeout(() => btn.innerText = originalText, 2000);
+        });
     }
 
     function downloadPrompt() {
@@ -255,15 +294,15 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Prompt_IGEC_${new Date().toLocaleDateString()}.md`;
+        a.download = `IGEC_Prompt_${new Date().toISOString().split('T')[0]}.md`;
         a.click();
     }
 
     function resetForm() {
-        if(confirm("Effacer tout votre travail actuel ?")) {
+        if(confirm("Are you sure you want to clear all inputs? This cannot be undone.")) {
             fields.forEach(id => {
                 document.getElementById(id).value = '';
-                localStorage.removeItem('igec_' + id);
+                localStorage.removeItem('igec_en_' + id);
             });
             updatePreview();
         }
