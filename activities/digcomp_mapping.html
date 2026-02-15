@@ -8,8 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            /* Light Material Palette */
-            --md-primary: #546E7A; /* Muted Slate Blue/Grey */
+            --md-primary: #546E7A;
             --md-on-primary: #FFFFFF;
             --md-background: #F8F9FA;
             --md-surface: #FFFFFF;
@@ -36,7 +35,7 @@
             box-sizing: border-box;
         }
 
-        header { margin-bottom: 40px; text-align: left; }
+        header { margin-bottom: 40px; }
         h1 { font-size: 28px; font-weight: 500; color: var(--md-primary); margin: 0; }
         .subtitle { font-size: 15px; color: var(--md-secondary); margin-top: 8px; }
 
@@ -62,6 +61,13 @@
             border-radius: 8px; font-size: 15px; box-sizing: border-box;
             background: var(--md-background); color: var(--md-on-surface);
             transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        /* Specifically for the requested resizable activity field */
+        textarea#task {
+            resize: vertical;
+            min-height: 80px; /* Approximately 3 lines */
         }
 
         input:focus, select:focus, textarea:focus {
@@ -87,7 +93,6 @@
 
         .btn-primary:hover { background: #455A64; filter: brightness(0.95); }
 
-        /* Light Summary Output */
         #summary-display {
             display: none; background: #F1F3F4; color: #3C4043;
             padding: 24px; border-radius: 12px; margin-top: 40px;
@@ -102,8 +107,6 @@
             border: 1px solid var(--md-outline); padding: 6px 14px;
             border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;
         }
-
-        .copy-button:hover { background: var(--md-surface-variant); }
 
         @media (max-width: 800px) { .mapping-grid { grid-template-columns: 1fr; } }
     </style>
@@ -121,7 +124,7 @@
             <div class="section-header"><span class="material-icons">description</span>Step 1: Task</div>
             <div class="form-group">
                 <label for="task">Your Concrete Activity</label>
-                <input type="text" id="task" placeholder="e.g., Drafting a stakeholder note with GenAI..." required>
+                <textarea id="task" rows="3" placeholder="Describe the concrete IGEC task where GenAI could be used (e.g., drafting a note, synthesising input)..." required aria-label="Describe your concrete task"></textarea>
             </div>
         </div>
 
@@ -152,8 +155,8 @@
         { title: "5: Problem identification and solving", comps: ["5.1 Identifying and solving technical problems", "5.2 Identifying needs and digital technological responses", "5.3 Identifying creative solutions using digital technologies", "5.4 Identifying and addressing digital competence needs"] }
     ];
 
-    const profLevels = ["Basic", "Intermediate", "Advanced", "Highly advanced"]; //
-    const aiEvidence = ["AI-Explicit", "AI-Implicit", "AI not Implicit or Explicit"]; //
+    const profLevels = ["Basic", "Intermediate", "Advanced", "Highly advanced"];
+    const aiEvidence = ["AI-Explicit", "AI-Implicit", "AI not Implicit or Explicit"];
 
     function setup() {
         const wrap = document.getElementById('mappingContainer');
@@ -187,7 +190,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom:0;">
                     <label>Justification</label>
-                    <textarea class="txt-just" rows="2" placeholder="Briefly explain why..." required></textarea>
+                    <textarea class="txt-just" rows="2" placeholder="Briefly explain why this competence matters..." required></textarea>
                 </div>
             `;
             wrap.appendChild(div);
@@ -199,7 +202,7 @@
         const taskVal = document.getElementById('task').value;
         let summary = `📍 DIGCOMP 3.0 MAPPING EXERCISE\n`;
         summary += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        summary += `TASK: ${taskVal.toUpperCase()}\n\n`;
+        summary += `TASK: ${taskVal}\n\n`;
 
         const c_sels = document.querySelectorAll('.sel-comp');
         const l_sels = document.querySelectorAll('.sel-lvl');
