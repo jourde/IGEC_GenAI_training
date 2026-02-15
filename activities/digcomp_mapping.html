@@ -64,10 +64,10 @@
             font-family: inherit;
         }
 
-        /* Specifically for the requested resizable activity field */
+        /* Resizable activity field with 3 lines default */
         textarea#task {
             resize: vertical;
-            min-height: 80px; /* Approximately 3 lines */
+            min-height: 85px; 
         }
 
         input:focus, select:focus, textarea:focus {
@@ -81,6 +81,21 @@
         .competence-block {
             padding: 24px; margin-bottom: 24px; background: #FAFAFA;
             border-radius: 8px; border-left: 4px solid var(--md-outline);
+        }
+
+        .competence-block.required-block {
+            border-left-color: var(--md-primary);
+            background: #FFFFFF;
+            border: 1px solid var(--md-outline);
+            border-left: 4px solid var(--md-primary);
+        }
+
+        .optional-tag {
+            font-size: 10px;
+            color: var(--md-secondary);
+            font-weight: 400;
+            margin-left: 8px;
+            text-transform: none;
         }
 
         .btn-primary {
@@ -108,6 +123,8 @@
             border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;
         }
 
+        .copy-button:hover { background: var(--md-surface-variant); }
+
         @media (max-width: 800px) { .mapping-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -116,7 +133,7 @@
 <div class="container" role="main">
     <header>
         <h1>DigComp 3.0 Mapping Exercise</h1>
-        <p class="subtitle">Online Form for Plenary Sessions & Training</p>
+        <p class="subtitle">GenAI Integration Activity Mapping</p>
     </header>
 
     <form id="mappingForm">
@@ -124,7 +141,7 @@
             <div class="section-header"><span class="material-icons">description</span>Step 1: Task</div>
             <div class="form-group">
                 <label for="task">Your Concrete Activity</label>
-                <textarea id="task" rows="3" placeholder="Describe the concrete IGEC task where GenAI could be used (e.g., drafting a note, synthesising input)..." required aria-label="Describe your concrete task"></textarea>
+                <textarea id="task" rows="3" placeholder="Describe the concrete IGEC task where GenAI could be used..." required aria-label="Describe your concrete task"></textarea>
             </div>
         </div>
 
@@ -146,7 +163,7 @@
 </div>
 
 <script>
-    // Framwork data
+    // DigComp 3.0 Framework Data
     const areas = [
         { title: "1: Information search, evaluation and management", comps: ["1.1 Browsing, searching and filtering information", "1.2 Evaluating information", "1.3 Managing information"] },
         { title: "2: Communication and collaboration", comps: ["2.1 Interacting through and with digital technologies", "2.2 Sharing through digital technologies", "2.3 Engaging in citizenship through digital technologies", "2.4 Collaborating through digital technologies", "2.5 Digital behaviour", "2.6 Managing digital identity"] },
@@ -161,28 +178,31 @@
     function setup() {
         const wrap = document.getElementById('mappingContainer');
         for (let i = 1; i <= 3; i++) {
+            const isRequired = i === 1;
             const div = document.createElement('div');
-            div.className = 'competence-block';
+            div.className = `competence-block ${isRequired ? 'required-block' : ''}`;
             div.innerHTML = `
-                <div style="font-size:11px; font-weight:700; color:#546E7A; margin-bottom:12px; text-transform:uppercase;">Priority Mapping #${i}</div>
+                <div style="font-size:11px; font-weight:700; color:#546E7A; margin-bottom:12px; text-transform:uppercase;">
+                    Priority Mapping #${i} ${isRequired ? '' : '<span class="optional-tag">(Optional)</span>'}
+                </div>
                 <div class="mapping-grid">
                     <div class="form-group">
                         <label>Competence</label>
-                        <select class="sel-comp" required>
+                        <select class="sel-comp" ${isRequired ? 'required' : ''}>
                             <option value="">Choose...</option>
                             ${areas.map(a => `<optgroup label="${a.title}">${a.comps.map(c => `<option value="${c}">${c}</option>`).join('')}</optgroup>`).join('')}
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Proficiency</label>
-                        <select class="sel-lvl" required>
+                        <select class="sel-lvl" ${isRequired ? 'required' : ''}>
                             <option value="">Choose...</option>
                             ${profLevels.map(l => `<option value="${l}">${l}</option>`).join('')}
                         </select>
                     </div>
                     <div class="form-group">
                         <label>AI Evidence</label>
-                        <select class="sel-evid" required>
+                        <select class="sel-evid" ${isRequired ? 'required' : ''}>
                             <option value="">Choose...</option>
                             ${aiEvidence.map(e => `<option value="${e}">${e}</option>`).join('')}
                         </select>
@@ -190,7 +210,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom:0;">
                     <label>Justification</label>
-                    <textarea class="txt-just" rows="2" placeholder="Briefly explain why this competence matters..." required></textarea>
+                    <textarea class="txt-just" rows="2" placeholder="Briefly explain why..." ${isRequired ? 'required' : ''}></textarea>
                 </div>
             `;
             wrap.appendChild(div);
@@ -209,12 +229,17 @@
         const e_sels = document.querySelectorAll('.sel-evid');
         const j_txts = document.querySelectorAll('.txt-just');
 
+        let validMappings = 0;
         c_sels.forEach((s, idx) => {
-            summary += `[Mapping ${idx + 1}]\n`;
-            summary += `• Competence: ${s.value}\n`;
-            summary += `• Level: ${l_sels[idx].value}\n`;
-            summary += `• Evidence: ${e_sels[idx].value}\n`;
-            summary += `• Why: ${j_txts[idx].value}\n\n`;
+            // Only include in summary if a competence has been selected
+            if (s.value) {
+                validMappings++;
+                summary += `[Mapping ${idx + 1}]\n`;
+                summary += `• Competence: ${s.value}\n`;
+                summary += `• Level: ${l_sels[idx].value}\n`;
+                summary += `• Evidence: ${e_sels[idx].value}\n`;
+                summary += `• Why: ${j_txts[idx].value}\n\n`;
+            }
         });
 
         document.getElementById('summaryText').innerText = summary;
