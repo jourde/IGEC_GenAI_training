@@ -7,19 +7,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #37474f; /* Deep Grey 800 */
-            --accent: #263238;
-            --bg: #f4f7f9;
+            --primary: #007A3D;   /* IGEC green darkened for AA contrast on white (5.1:1) */
+            --primary-brand: #00A651; /* IGEC brand green — use only on dark/coloured backgrounds */
+            --accent: #005C2E;    /* Darker green for hover states on white (7.1:1) */
+            --bg: #f8f9fa;
             --surface: #ffffff;
-            --border: #cfd8dc;
+            --border: #b8d9b8;    /* Green-tinted border, visible against white */
             --radius: 12px;
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --text-main: #1c1b1f;
-            --text-secondary: #546e7a; /* darkened from #607d8b for WCAG AA contrast */
-            --focus-ring: 0 0 0 3px #fff, 0 0 0 5px #37474f; /* high-contrast 2-layer focus ring */
+            --text-main: #0a0e27;
+            --text-secondary: #3e4854;
+            --focus-ring: 0 0 0 3px #fff, 0 0 0 5px #007A3D;
+            --error: #c41e3a;
+            --success: #007A3D;   /* AA-compliant green for success text on white */
+            --saving: #b45309;    /* Amber darkened for AA on white (4.6:1) */
         }
 
-        /* Skip to main content link (WCAG 2.4.1) */
         .skip-link {
             position: absolute; top: -100px; left: 1rem; z-index: 99999;
             background: var(--primary); color: #fff; padding: 10px 18px;
@@ -40,16 +43,16 @@
         }
 
         header {
-            background: var(--primary); color: white;
+            background: var(--accent); color: white; /* #005C2E on white text: 7.1:1 — AAA */
             padding: 1rem 2.5rem; display: flex; justify-content: space-between; align-items: center;
             box-shadow: var(--shadow);
         }
 
         .main-content {
             display: flex; flex: 1; overflow: hidden; padding: 25px; gap: 25px;
+            background: white;
         }
 
-        /* Unified Panel Styles */
         .editor-panel, .preview-panel {
             flex: 1; display: flex; flex-direction: column;
             background: var(--surface);
@@ -61,6 +64,7 @@
 
         .panel-scroll {
             flex: 1; overflow-y: auto; padding: 25px;
+            background: white;
         }
 
         .panel-header {
@@ -72,78 +76,145 @@
             color: var(--primary);
         }
 
-        /* Form Styling */
         .field-header {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
         }
 
-        label { font-weight: 700; color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 4px; }
+        label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 4px;
+            text-transform: none;
+        }
 
-        .hint { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; display: block; line-height: 1.4; }
+        .hint {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: block;
+            line-height: 1.5;
+        }
+
+        select, input[type="text"], input[type="email"], input[type="password"] {
+            min-height: 44px;
+            font-size: 1rem;
+        }
 
         .input-container { position: relative; margin-bottom: 28px; }
 
         textarea {
-            width: 100%; border: 1px solid var(--border); border-radius: 8px;
-            padding: 14px 14px 42px 14px; font-size: 1rem; font-family: inherit;
-            resize: vertical; min-height: 90px; box-sizing: border-box;
-            transition: all 0.2s; background-color: #fff;
+            width: 100%;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 14px 42px 14px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 90px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            background-color: #fff;
+            color: var(--text-main);
+            line-height: 1.5;
         }
 
-        textarea:focus { outline: none; border: 2px solid var(--primary); box-shadow: 0 0 0 4px rgba(55, 71, 79, 0.15); }
+        textarea:focus {
+            outline: none;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 122, 61, 0.18);
+        }
 
-        /* Visible focus ring for all interactive elements (WCAG 2.4.7, 2.4.11) */
         :focus-visible {
             outline: 3px solid var(--primary);
             outline-offset: 2px;
             border-radius: 4px;
         }
-        button:focus-visible, a:focus-visible { box-shadow: var(--focus-ring); outline: none; }
+        button:focus-visible, a:focus-visible {
+            box-shadow: var(--focus-ring);
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+        input:focus-visible, select:focus-visible, textarea:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
 
         .lazy-prompt { background-color: #fdfdfd; border: 1px dashed var(--border); }
 
-        /* Fullscreen Mode */
         .fullscreen-btn {
             position: absolute; bottom: 10px; right: 10px; z-index: 10;
             background: #eceff1; border: none; cursor: pointer; color: var(--primary);
             padding: 5px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;
             font-size: 0.75rem; font-weight: 600; font-family: inherit;
             transition: 0.2s; letter-spacing: 0.3px;
-            /* Always visible for keyboard users; subtler visually at rest */
             opacity: 0.55;
         }
-        /* Show fully on hover OR focus (keyboard nav) */
         .input-container:hover .fullscreen-btn,
         .fullscreen-btn:focus-visible { opacity: 1; }
         .fullscreen-btn:hover { background: #cfd8dc; transform: translateY(-1px); opacity: 1; }
 
-        /* Hide-from-prompt toggle button */
         .hide-toggle-btn {
-            background: none; border: none; cursor: pointer;
-            padding: 2px 6px; border-radius: 4px;
-            color: var(--text-secondary); line-height: 1;
-            display: inline-flex; align-items: center; gap: 3px;
-            font-size: 0.8rem; font-family: inherit; font-weight: 600;
-            transition: color 0.15s, background 0.15s; opacity: 0.6;
+            background: none;
+            border: 2px solid transparent;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            font-weight: 600;
+            transition: color 0.15s, background 0.15s, border 0.15s;
+            opacity: 0.7;
+            min-width: 44px;
+            min-height: 44px;
         }
-        .hide-toggle-btn:hover { opacity: 1; color: var(--primary); background: #eceff1; }
-        .hide-toggle-btn[aria-pressed="true"] { color: #b0bec5; opacity: 1; }
-        .hide-toggle-btn[aria-pressed="true"]:hover { color: #e57373; background: #fff5f5; }
+        .hide-toggle-btn:hover {
+            opacity: 1;
+            color: var(--primary);
+            background: #f0f2f5;
+        }
+        .hide-toggle-btn:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        .hide-toggle-btn[aria-pressed="true"] {
+            color: var(--error);
+            opacity: 1;
+            background: #fde8e8;
+        }
+        .hide-toggle-btn[aria-pressed="true"]:hover {
+            color: #8b0000;
+            background: #f5c1c1;
+        }
         .hide-toggle-btn .icon-eye-open  { display: inline-block; }
         .hide-toggle-btn .icon-eye-slash { display: none; }
         .hide-toggle-btn[aria-pressed="true"] .icon-eye-open  { display: none; }
         .hide-toggle-btn[aria-pressed="true"] .icon-eye-slash { display: inline-block; }
 
-        /* Hidden field state */
         .input-container.field-hidden textarea {
-            opacity: 0.45; border-style: dashed;
-            background-color: #f4f7f9; color: var(--text-secondary);
+            opacity: 0.6;
+            border-style: dashed;
+            border-color: var(--border);
+            background-color: #f8f9fa;
+            color: var(--text-secondary);
         }
         .input-container.field-hidden > .field-header > label {
-            text-decoration: line-through; color: var(--text-secondary);
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+        .input-container.field-hidden::after {
+            content: " (ocultado do prompt)";
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-style: italic;
         }
 
-        /* Override label margin when inside flex field-header */
         .field-header label { margin-bottom: 0; }
 
         textarea.fullscreen-active {
@@ -161,96 +232,222 @@
         }
         .fs-exit-btn:hover { background: var(--accent); transform: translateY(-1px); }
 
-        /* Live Preview Styling */
         .preview-body {
             font-family: 'Fira Code', monospace;
             font-size: 1rem;
-            line-height: 1.7;
+            line-height: 1.6;
             white-space: pre-wrap;
-            color: #334155;
+            color: var(--text-main);
             background: #ffffff;
-            border: 1px solid #edf2f7;
+            border: 1px solid var(--border);
             border-radius: 6px;
             padding: 20px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .tag-h1 { color: #e65100; font-weight: bold; border-bottom: 2px solid #ffccbc; padding-bottom: 2px; }
 
-        /* Actions */
         .actions { display: flex; gap: 12px; padding: 20px 25px; background: #fafafa; border-top: 1px solid var(--border); }
 
         .btn {
-            flex: 1; padding: 14px; border-radius: 8px; border: none;
-            font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            flex: 1;
+            padding: 14px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            text-decoration: none;
         }
 
-        .btn-copy { background: var(--primary); color: white; }
-        .btn-download { background: #546e7a; color: white; }
-        .btn-reset { background: transparent; color: #b0bec5; border: 1px solid #cfd8dc; flex: 0.4; }
+        .btn-copy {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-copy:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-copy:active { transform: translateY(1px); }
 
-        .btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
-        .btn-reset:hover { border-color: #90a4ae; color: #607d8b; }
+        .btn-download {
+            background: #3e4854;
+            color: white;
+            border-color: #3e4854;
+        }
+        .btn-download:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-download:active { transform: translateY(1px); }
 
-        #save-status { font-weight: 400; text-transform: none; color: #2e7d32; font-size: 0.75rem; } /* darkened green for WCAG AA on #fafafa */
+        .btn-reset {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+            flex: 0.4;
+        }
+        .btn-reset:hover { border-color: var(--primary); color: var(--primary); background: #f0f2f5; }
+        .btn-reset:active { transform: translateY(1px); }
+
+        /* Buttons inside the dark header — white text on dark green */
+        .btn-header {
+            background: rgba(255,255,255,0.15);
+            color: #ffffff;
+            border: 2px solid rgba(255,255,255,0.5);
+            flex: none;
+            font-size: 0.8rem;
+            padding: 8px 14px;
+        }
+        .btn-header:hover { background: rgba(255,255,255,0.28); border-color: #ffffff; }
+        .btn-header:active { transform: translateY(1px); }
+        .btn-header--danger { border-color: rgba(255,180,160,0.7); color: #ffe0d6; }
+        .btn-header--danger:hover { background: rgba(220,60,30,0.25); border-color: #ffb4a0; }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        #save-status {
+            font-weight: 400;
+            text-transform: none;
+            color: var(--success);
+            font-size: 0.75rem;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
 
         hr { border: 0; border-top: 1px solid #eceff1; margin: 35px 0; }
 
-        /* Prompt stats counter */
         .prompt-stats {
             text-align: right; font-size: 0.78rem; color: var(--text-secondary);
             margin-top: 10px; font-family: 'Fira Code', monospace;
         }
 
-        /* Draft reference block in preview */
-        .draft-ref {
-            background: #f8f9fa; border: 1px solid #e8ecef; border-radius: 6px;
-            padding: 12px 16px; margin-bottom: 18px;
-            font-style: italic; font-size: 0.9rem; color: #546e7a; /* WCAG AA on #f8f9fa */
-            font-family: 'Fira Code', monospace; white-space: pre-wrap; line-height: 1.5;
+        .btn-schema {
+            background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+            border-radius: 6px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600;
+            font-family: inherit; cursor: pointer; transition: 0.2s; white-space: nowrap; text-transform: none;
         }
-        .draft-ref-label {
-            display: block; font-style: normal; font-weight: 700; font-size: 0.72rem;
-            text-transform: uppercase; letter-spacing: 0.5px; color: #546e7a;
-            margin-bottom: 6px; font-family: 'Roboto', sans-serif;
-        }
+        .btn-schema:hover { background: #eceff1; color: var(--primary); border-color: #90a4ae; }
 
-.example-toggle-btn {
-            width: 100%; padding: 10px; border-radius: 8px; border: 1px dashed var(--border);
-            background: transparent; color: var(--text-secondary); cursor: pointer;
-            font-size: 0.85rem; font-family: inherit; font-weight: 600;
-            transition: 0.2s; text-align: center;
+        .example-toggle-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px dashed var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .example-toggle-btn:hover { border-color: var(--primary); color: var(--primary); background: #f4f7f9; }
-        .example-toggle-btn.active { border-color: #b0bec5; color: #b0bec5; }
-        .example-toggle-btn.active:hover { border-color: #e57373; color: #e57373; background: #fff5f5; }
+        .example-toggle-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #f8f9fa;
+        }
+        .example-toggle-btn:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        .example-toggle-btn.active {
+            border-color: var(--error);
+            color: var(--error);
+            background: #fde8e8;
+        }
+        .example-toggle-btn.active:hover {
+            border-color: #8b0000;
+            color: #8b0000;
+            background: #f5c1c1;
+        }
 
         @media (max-width: 900px) {
             .main-content { flex-direction: column; overflow-y: auto; }
             .editor-panel, .preview-panel { min-height: 600px; }
         }
-    </style>
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body, html {
+                background-color: #ffffff;
+                color: var(--text-main);
+            }
+            .editor-panel, .preview-panel { background: #ffffff; }
+            .panel-header { background: #f5f5f5; }
+            .preview-body { background: #ffffff; color: var(--text-main); }
+            textarea { background-color: #ffffff; color: var(--text-main); border-color: var(--border); }
+            select { background-color: #ffffff; color: var(--text-main); }
+        }
+    
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px 14px;
+  }
+  .checkbox-grid label {
+    font-weight: 500;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+  }
+  .checkbox-grid input {
+    margin-right: 8px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    accent-color: var(--primary);
+  }
+  .checkbox-grid input:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+</style>
 </head>
 <body>
 
-<!-- Ir para o conteúdo principal (WCAG 2.4.1) -->
 <a class="skip-link" href="#main-content">Ir para o conteúdo principal</a>
 
 <div class="app-wrapper">
     <header role="banner">
         <div>
-            <h1 style="margin:0; font-size: 1.5rem; letter-spacing: -0.5px;">Construtor de prompts para IGEC</h1>
+            <h1 style="margin:0; font-size: 1.5rem; letter-spacing: -0.5px;">Construtor de prompts para IGEC <span style="font-size: 0.75rem; font-weight: 400; opacity: 0.6; letter-spacing: 0;">v1.0</span></h1>
             <span style="font-size: 0.85rem; opacity: 0.9;">Estruture o seu pensamento. Molde o resultado.</span>
         </div>
-        <button class="btn btn-reset" onclick="resetForm()">Limpar Dados</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-header" onclick="backupCacheJSON()" title="Guardar uma cópia de segurança do seu trabalho atual (JSON)">💾 Backup JSON</button>
+            <button class="btn btn-header" onclick="restoreCacheJSON()" title="Restaurar uma cópia de segurança anterior (JSON)">📂 Restaurar JSON</button>
+            <button class="btn btn-header" onclick="backupCacheMD()" title="Guardar uma cópia de segurança do seu trabalho atual (Markdown)">📝 Backup MD</button>
+            <button class="btn btn-header" onclick="restoreCacheMD()" title="Restaurar uma cópia de segurança anterior (Markdown)">📥 Importar MD</button>
+            <button class="btn btn-header btn-header--danger" onclick="resetForm()">Limpar Dados</button>
+        </div>
     </header>
 
-    <!-- aria-live region for status announcements (WCAG 4.1.3) -->
     <div id="a11y-announce" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;"></div>
 
     <main id="main-content" class="main-content">
         <section class="editor-panel" aria-label="Construtor de prompt">
-            <div class="panel-header" aria-hidden="true">Construtor de Prompt</div>
+            <div class="panel-header">
+                <span aria-hidden="true">Construtor de Prompt</span>
+                <button class="btn-schema" onclick="exportSchema()" aria-label="Exportar esquema da interface como ficheiro Markdown">Exportar esquema</button>
+            </div>
             <div class="panel-scroll">
                 <div class="input-container">
                     <label for="draft">Pedido Inicial (para referência)</label>
@@ -271,7 +468,23 @@
                             <svg class="icon-eye-slash" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                         </button>
                     </div>
-                    <span id="hint-persona" class="hint">Papel (ex.: Especialista Sénior em Auditoria com experiência em Direito Administrativo).</span>
+                    <span id="hint-persona" class="hint"></span>
+                    <label for="persona_role" style="font-weight: 700; color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 8px;">Cargo/Função:</label>
+                    <select id="persona_role" style="width: 100%; border: 2px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 1rem; font-family: inherit; margin-bottom: 20px; background-color: #fff; transition: all 0.2s; min-height: 44px;" aria-label="Selecionar cargo ou função">
+                        <option value="">Selecione um cargo...</option>
+                        <option value="Subinspetor-geral/inspetor-geral">Subinspetor-geral/inspetor-geral</option>
+                        <option value="Chefe de equipa">Chefe de equipa</option>
+                        <option value="Inspetor">Inspetor</option>
+                        <option value="Averiguante">Averiguante</option>
+                        <option value="Relator">Relator</option>
+                        <option value="Avaliador">Avaliador</option>
+                        <option value="Interlocutor">Interlocutor</option>
+                        <option value="Formador">Formador</option>
+                        <option value="Instrutor">Instrutor</option>
+                        <option value="Coordenador">Coordenador</option>
+                        <option value="Técnico Superior">Técnico Superior</option>
+                        <option value="Diretor de serviços">Diretor de serviços</option>
+                    </select>
                     <textarea id="persona" placeholder="Age como um..."
                         aria-describedby="hint-persona"></textarea>
                     <button class="fullscreen-btn" onclick="toggleFS('persona')" aria-label="Expandir Persona/Papel para ecrã inteiro">⛶ Ecrã Inteiro</button>
@@ -288,6 +501,14 @@
                         </button>
                     </div>
                     <span id="hint-context" class="hint">Informações de fundo (ex.: Decreto-Lei 54/2018, reclamações específicas).</span>
+                    <div style="margin-bottom: 14px;">
+                        <label style="display:flex; align-items:center; gap:10px; font-weight:500; color:var(--text-main); cursor:pointer;">
+                            <input type="checkbox" id="context_addendum_toggle"
+                                   style="width:18px; height:18px; min-width:18px; accent-color:var(--primary); cursor:pointer;"
+                                   aria-describedby="hint-context">
+                            Incluir enquadramento legal e orgânico da IGEC no prompt
+                        </label>
+                    </div>
                     <textarea id="context" placeholder="Esta tarefa decorre de..."
                         aria-describedby="hint-context"></textarea>
                     <button class="fullscreen-btn" onclick="toggleFS('context')" aria-label="Expandir Contexto para ecrã inteiro">⛶ Ecrã Inteiro</button>
@@ -319,8 +540,29 @@
                             <svg class="icon-eye-slash" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                         </button>
                     </div>
-                    <span id="hint-audience" class="hint">Quem vai ler o resultado? (ex.: Conselho de Administração da Escola).</span>
-                    <textarea id="audience" placeholder="O público-alvo é..."
+                    <span id="hint-audience" class="hint">Quem vai ler o resultado?</span>
+                    
+      <fieldset id="audience_checks" aria-label="Selecionar audiência (múltipla)" style="border:0;padding:0;margin:0 10px 12px 0;">
+        <legend class="hint" style="margin:0 0 8px 0;">Selecione um ou mais destinatários:</legend>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" value="AE/ENA"> AE/ENA</label>
+          <label><input type="checkbox" value="Diretores/Direções Pedagógicas/Entidades titulares"> Diretores/Direções Pedagógicas/Entidades titulares</label>
+          <label><input type="checkbox" value="Docentes"> Docentes</label>
+          <label><input type="checkbox" value="Pessoal não docente"> Pessoal não docente</label>
+          <label><input type="checkbox" value="Pais e encarregados de educação"> Pais e encarregados de educação</label>
+          <label><input type="checkbox" value="Crianças/Alunos"> Crianças/Alunos</label>
+          <label><input type="checkbox" value="Estudantes"> Estudantes</label>
+          <label><input type="checkbox" value="Instituições de Ensino Superior Públicas"> Instituições de Ensino Superior Públicas</label>
+          <label><input type="checkbox" value="Instituições de Ensino Superior Privadas"> Instituições de Ensino Superior Privadas</label>
+          <label><input type="checkbox" value="Fundação para a Ciência e Tecnologia"> Fundação para a Ciência e Tecnologia</label>
+          <label><input type="checkbox" value="Centros de Investigação"> Centros de Investigação</label>
+          <label><input type="checkbox" value="Autarquias"> Autarquias</label>
+          <label><input type="checkbox" value="Ministério Público"> Ministério Público</label>
+          <label><input type="checkbox" value="Escolas privadas"> Escolas privadas</label>
+          <label><input type="checkbox" value="Outras entidades"> Outras entidades</label>
+        </div>
+      </fieldset>
+      <textarea id="audience" placeholder="O público-alvo é..."
                         aria-describedby="hint-audience"></textarea>
                     <button class="fullscreen-btn" onclick="toggleFS('audience')" aria-label="Expandir Audiência para ecrã inteiro">⛶ Ecrã Inteiro</button>
                 </div>
@@ -336,6 +578,14 @@
                         </button>
                     </div>
                     <span id="hint-boundaries" class="hint">Formato, tom, extensão ou restrições (ex.: tom técnico, máx. 2 páginas).</span>
+                    <label for="boundaries_style" style="font-weight: 700; color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 8px;">Estilo:</label>
+                    <select id="boundaries_style" style="width: 100%; border: 2px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 1rem; font-family: inherit; margin-bottom: 20px; background-color: #fff; transition: all 0.2s; min-height: 44px;" aria-label="Selecionar estilo">
+                        <option value="">Selecione um estilo...</option>
+                        <option value="Formal">Formal</option>
+                        <option value="Informal">Informal</option>
+                        <option value="Explicativo">Explicativo</option>
+                    </select>
+
                     <textarea id="boundaries" placeholder="A resposta deve..."
                         aria-describedby="hint-boundaries"></textarea>
                     <button class="fullscreen-btn" onclick="toggleFS('boundaries')" aria-label="Expandir Limites &amp; Estilo para ecrã inteiro">⛶ Ecrã Inteiro</button>
@@ -389,6 +639,7 @@
     const hiddenFields = new Set();
 
     window.onload = () => {
+
         fields.forEach(id => {
             const saved = localStorage.getItem('igec_pt_' + id);
             if (saved) document.getElementById(id).value = saved;
@@ -398,7 +649,66 @@
                 saveLocal(id);
             });
         });
-        // Keyboard shortcut: Ctrl/Cmd + Shift + C → Copy to Clipboard
+
+        // Restore & persist persona role dropdown
+        const roleSelect = document.getElementById('persona_role');
+        const savedRole = localStorage.getItem('igec_pt_persona_role');
+        if (savedRole) roleSelect.value = savedRole;
+
+        roleSelect.addEventListener('change', () => {
+            localStorage.setItem('igec_pt_persona_role', roleSelect.value);
+            updatePreview();
+            showSaving();
+        });
+
+  // Restore & persist audience checkboxes
+  const audBoxWrap = document.getElementById('audience_checks');
+  if (audBoxWrap) {
+    const saved = localStorage.getItem('igec_pt_audience_checks');
+    if (saved) {
+      try { const arr = JSON.parse(saved); Array.from(audBoxWrap.querySelectorAll('input[type=\'checkbox\']')).forEach(cb => cb.checked = arr.includes(cb.value)); } catch(e) {}
+    }
+    audBoxWrap.addEventListener('change', () => {
+      const arr = Array.from(audBoxWrap.querySelectorAll('input[type=\'checkbox\']:checked')).map(cb => cb.value);
+      localStorage.setItem('igec_pt_audience_checks', JSON.stringify(arr));
+
+      // Automatically add selected recipients to the audience textarea
+      const audienceTextarea = document.getElementById('audience');
+      if (arr.length > 0) {
+        const selectedText = arr.map(item => '- ' + item).join('\n');
+        audienceTextarea.value = selectedText;
+        localStorage.setItem('igec_pt_audience', selectedText);
+      }
+
+      updatePreview();
+      showSaving();
+    });
+  }
+
+  // Restore & persist context addendum toggle
+  const addendumToggle = document.getElementById('context_addendum_toggle');
+  if (addendumToggle) {
+    addendumToggle.checked = localStorage.getItem('igec_pt_context_addendum') === 'true';
+    addendumToggle.addEventListener('change', () => {
+      localStorage.setItem('igec_pt_context_addendum', addendumToggle.checked);
+      updatePreview();
+      showSaving();
+    });
+  }
+
+  // Restore & persist style selection
+  const styleSelect = document.getElementById('boundaries_style');
+  if (styleSelect) {
+    const saved = localStorage.getItem('igec_pt_boundaries_style');
+    if (saved) styleSelect.value = saved;
+
+    styleSelect.addEventListener('change', () => {
+      localStorage.setItem('igec_pt_boundaries_style', styleSelect.value);
+      updatePreview();
+      showSaving();
+    });
+  }
+
         document.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'C') {
                 e.preventDefault();
@@ -406,7 +716,6 @@
             }
         });
 
-        // Restore hidden field state
         HIDEABLE_FIELDS.forEach(({ id, label }) => {
             if (localStorage.getItem('igec_pt_' + id + '_hidden') === 'true') {
                 hiddenFields.add(id);
@@ -414,7 +723,6 @@
             }
         });
 
-        // Restore example visibility
         if (localStorage.getItem('igec_pt_example_visible') === 'true') {
             document.getElementById('example-container').style.display = 'block';
             const btn = document.getElementById('example-toggle-btn');
@@ -445,29 +753,74 @@
     }
 
     function updatePreview() {
-        const segments = HIDEABLE_FIELDS
-            .filter(({ id }) => !hiddenFields.has(id))
-            .map(({ id, heading }) => {
-                const val = document.getElementById(id).value
-                    || '(' + heading.slice(2) + ' não definido)';
-                return heading + '\n' + val;
-            });
+  const contextAddendum = `A IGEC exerce a sua atividade no âmbito da educação pré-escolar e da educação escolar, incluindo as suas modalidades especiais e de educação extraescolar, junto dos estabelecimentos de educação e ensino da rede pública - incluindo os respetivos agrupamentos e centros de formação de escolas - e das redes privadas, cooperativa e solidária.
+A missão, as atribuições e a orgânica da IGEC encontram-se genericamente estabelecidas no art.º 11.º do Decreto-Lei n.º 125/2011, de 29 de dezembro, e especificamente definidas:
+- no Decreto Regulamentar n.º 15/2012, de 27 de janeiro, que aprova a orgânica da IGEC - nos termos previstos no Decreto-Lei n.º 276/2007, de 31 de julho, na redação atual, que define o regime jurídico da atividade de inspeção, auditoria e fiscalização dos serviços da administração direta e indireta do Estado;
+- na Portaria n.º 145/2012, de 16 de maio, que fixa a estrutura orgânica, com as alterações introduzidas pela Portaria n.º 256/2012, de 27 de agosto, e pela Portaria n.º 230/2013, de 18 de julho;
+- e no Despacho n.º 10433/2013, no Despacho n.º 10036/2020 e Despacho n.º 7633/2024, que definem as unidades orgânicas flexíveis e as equipas multidisciplinares, bem como as áreas territoriais de inspeção.`;
+  const segments = [];
 
-        const exampleVisible = document.getElementById('example-container').style.display !== 'none';
-        if (exampleVisible) {
-            const e = document.getElementById('example').value || '(EXEMPLO não definido)';
-            segments.push('# EXEMPLO\n' + e);
-        }
+  HIDEABLE_FIELDS
+    .filter(({ id }) => !hiddenFields.has(id))
+    .forEach(({ id, heading }) => {
+      let val = "";
+      if (id === 'persona') {
+        const roleEl = document.getElementById('persona_role');
+        const role = roleEl ? roleEl.value : '';
+        const txtEl = document.getElementById('persona');
+        const txtVal = txtEl ? txtEl.value.trim() : '';
+        if (role && txtVal) { val = 'A sua função na IGEC (Inspeção-Geral da Educação e Ciência): ' + role + '\n\n' + txtVal; }
+        else if (role) { val = 'A sua função na IGEC (Inspeção-Geral da Educação e Ciência): ' + role; }
+        else if (txtVal) { val = txtVal; }
+        else { val = '(' + heading.slice(2) + ' não definido)'; }
+      } else if (id === 'context') {
+        const el = document.getElementById('context');
+        const base = el ? el.value.trim() : '';
+        const addendumChecked = document.getElementById('context_addendum_toggle')?.checked;
+        const parts = [];
+        if (addendumChecked) parts.push(contextAddendum);
+        if (base) parts.push(base);
+        val = parts.join('\n\n') || '(' + heading.slice(2) + ' não definido)';
+      } else if (id === 'audience') {
+        const boxWrap = document.getElementById('audience_checks');
+        const chosen = boxWrap ? Array.from(boxWrap.querySelectorAll('input[type\=\"checkbox\\"]:checked')).map(o => o.value) : [];
+        const base = (document.getElementById('audience') || {}).value || '';
+        if (chosen.length && base) { val = 'Seleção: ' + chosen.join('; ') + '\n\n' + base; }
+        else if (chosen.length) { val = 'Seleção: ' + chosen.join('; '); }
+        else if (base) { val = base; }
+        else { val = '(' + heading.slice(2) + ' não definido)'; }
+      } else if (id === 'boundaries') {
+        const styleSelect = document.getElementById('boundaries_style');
+        const selectedStyle = styleSelect ? styleSelect.value : '';
+        const base = (document.getElementById('boundaries') || {}).value || '';
+        const parts = [];
+        if (selectedStyle) parts.push('O estilo deve ser: ' + selectedStyle);
+        if (base) parts.push(base);
+        val = parts.length ? parts.join('\n\n') : '(' + heading.slice(2) + ' não definido)';
+      } else {
+        const el = document.getElementById(id);
+        const base = el ? el.value : '';
+        val = base || '(' + heading.slice(2) + ' não definido)';
+      }
+      segments.push(heading + '\n' + val);
+    });
 
-        const template = segments.join('\n\n');
-        const highlighted = template.replace(/(# [A-ZÀ-Ú &\/]+)/g, '<span class="tag-h1">$1</span>');
-        document.getElementById('preview-body').innerHTML = highlighted;
+  const exampleVisible = document.getElementById('example-container').style.display !== 'none';
+  if (exampleVisible) {
+    const eEl = document.getElementById('example');
+    const e = eEl ? (eEl.value || '(EXEMPLO não definido)') : '(EXEMPLO não definido)';
+    segments.push('# EXEMPLO\n' + e);
+  }
 
-        const words = template.trim().split(/\s+/).filter(Boolean).length;
-        const chars = template.length;
-        document.getElementById('prompt-stats').textContent =
-            `${words} palavras · ${chars.toLocaleString()} caracteres`;
-    }
+  const template = segments.join('\n\n');
+  const highlighted = template.replace(/(# [A-ZÀ-Ú &\/]+)/g, '<span class="tag-h1">$1<\/span>');
+  document.getElementById('preview-body').innerHTML = highlighted;
+
+  const words = template.trim().split(/\s+/).filter(Boolean).length;
+  const chars = template.length;
+  document.getElementById('prompt-stats').textContent = `${words} palavras · ${chars.toLocaleString()} caracteres`;
+}
+
 
     function announce(msg) {
         const el = document.getElementById('a11y-announce');
@@ -476,17 +829,21 @@
         setTimeout(() => { el.textContent = msg; }, 50);
     }
 
-    function saveLocal(id) {
-        localStorage.setItem('igec_pt_' + id, document.getElementById(id).value);
+    function showSaving() {
         const status = document.getElementById('save-status');
-        status.innerText = "A guardar...";
-        status.style.color = "#f57c00"; /* darkened amber for contrast on #fafafa */
-
+        const root = document.documentElement;
+        status.innerText = 'A guardar...';
+        status.style.color = getComputedStyle(root).getPropertyValue('--saving').trim();
         clearTimeout(window.saveTimer);
         window.saveTimer = setTimeout(() => {
-            status.innerText = "Guardado no browser";
-            status.style.color = "#2e7d32"; /* darkened green for WCAG AA */
+            status.innerText = 'Guardado no browser';
+            status.style.color = getComputedStyle(root).getPropertyValue('--success').trim();
         }, 1000);
+    }
+
+    function saveLocal(id) {
+        localStorage.setItem('igec_pt_' + id, document.getElementById(id).value);
+        showSaving();
     }
 
     function toggleFS(id) {
@@ -566,6 +923,78 @@
         a.click();
     }
 
+    function exportSchema() {
+        const date = new Date().toISOString().split('T')[0];
+        const lines = [
+            `# Esquema da Interface — Construtor de prompts para IGEC v1.0`,
+            `_Utilize este ficheiro para sugerir melhorias à interface (ex.: menus pendentes, caixas de seleção, novos campos)._`,
+            `_Data de exportação: ${date}_`,
+            ``
+        ];
+
+        // Helper to read text content of an element, stripping extra whitespace
+        const text = (el) => el ? el.textContent.trim() : '';
+
+        // Draft field (not hideable, no hide state)
+        const draftEl = document.getElementById('draft');
+        lines.push(`---`, ``);
+        lines.push(`## Campo: ${text(document.querySelector('label[for="draft"]'))}`);
+        lines.push(`- **ID:** \`draft\``);
+        lines.push(`- **Tipo atual:** \`textarea\``);
+        lines.push(`- **Etiqueta:** ${text(document.querySelector('label[for="draft"]'))}`);
+        lines.push(`- **Dica:** ${text(document.getElementById('hint-draft'))}`);
+        lines.push(`- **Placeholder:** ${draftEl.placeholder}`);
+        lines.push(`- **Valor atual:** ${draftEl.value.trim() || '*(vazio)*'}`);
+        lines.push(`- **Sugestões de melhoria:**`);
+        lines.push(``);
+
+        // Hideable fields
+        HIDEABLE_FIELDS.forEach(({ id, label }) => {
+            const el = document.getElementById(id);
+            const isHidden = hiddenFields.has(id);
+            const labelEl = document.querySelector(`label[for="${id}"]`);
+            const hintEl = document.getElementById(`hint-${id}`);
+            lines.push(`---`, ``);
+            lines.push(`## Campo: ${label}`);
+            lines.push(`- **ID:** \`${id}\``);
+            lines.push(`- **Tipo atual:** \`textarea\``);
+            lines.push(`- **Etiqueta:** ${text(labelEl)}`);
+            lines.push(`- **Dica:** ${text(hintEl)}`);
+            lines.push(`- **Placeholder:** ${el.placeholder}`);
+            lines.push(`- **Estado:** ${isHidden ? 'oculto do prompt' : 'visível no prompt'}`);
+            lines.push(`- **Valor atual:** ${el.value.trim() || '*(vazio)*'}`);
+            lines.push(`- **Sugestões de melhoria:**`);
+            lines.push(``);
+        });
+
+        // Example field (optional, may be hidden)
+        const exampleVisible = document.getElementById('example-container').style.display !== 'none';
+        const exampleEl = document.getElementById('example');
+        lines.push(`---`, ``);
+        lines.push(`## Campo: EXEMPLO *(opcional)*`);
+        lines.push(`- **ID:** \`example\``);
+        lines.push(`- **Tipo atual:** \`textarea\``);
+        lines.push(`- **Etiqueta:** # EXEMPLO`);
+        lines.push(`- **Dica:** ${text(document.getElementById('hint-example'))}`);
+        lines.push(`- **Placeholder:** ${exampleEl.placeholder}`);
+        lines.push(`- **Estado:** ${exampleVisible ? 'visível' : 'oculto (secção não expandida)'}`);
+        lines.push(`- **Valor atual:** ${exampleEl.value.trim() || '*(vazio)*'}`);
+        lines.push(`- **Sugestões de melhoria:**`);
+        lines.push(``);
+
+        lines.push(`---`);
+        lines.push(`_Envie este ficheiro preenchido ao responsável pelo desenvolvimento da ferramenta._`);
+
+        const blob = new Blob([lines.join('\n')], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `esquema_interface_${date}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+        announce('Esquema da interface exportado.');
+    }
+
     function resetForm() {
         if(confirm("Tem a certeza de que pretende apagar todos os dados? Esta ação não pode ser desfeita.")) {
             fields.forEach(id => {
@@ -582,8 +1011,254 @@
             btn.innerHTML = '+ Adicionar Exemplo <span style="font-weight:400; opacity:0.7;">(opcional)</span>';
             btn.classList.remove('active');
             localStorage.removeItem('igec_pt_example_visible');
+            const roleSelect = document.getElementById('persona_role');
+            roleSelect.value = '';
+            localStorage.removeItem('igec_pt_persona_role');
+            const styleSelect = document.getElementById('boundaries_style');
+            styleSelect.value = '';
+            localStorage.removeItem('igec_pt_boundaries_style');
+            const addendumToggle = document.getElementById('context_addendum_toggle');
+            if (addendumToggle) addendumToggle.checked = false;
+            localStorage.removeItem('igec_pt_context_addendum');
             updatePreview();
         }
+    }
+
+    function backupCacheJSON() {
+        const backup = {};
+
+        // Backup all text fields
+        fields.forEach(id => {
+            backup['igec_pt_' + id] = localStorage.getItem('igec_pt_' + id) || '';
+        });
+
+        // Backup persona role
+        backup['igec_pt_persona_role'] = localStorage.getItem('igec_pt_persona_role') || '';
+
+        // Backup audience checkboxes
+        backup['igec_pt_audience_checks'] = localStorage.getItem('igec_pt_audience_checks') || '';
+
+        // Backup style selection
+        backup['igec_pt_boundaries_style'] = localStorage.getItem('igec_pt_boundaries_style') || '';
+
+        // Backup hidden field states
+        HIDEABLE_FIELDS.forEach(({ id }) => {
+            backup['igec_pt_' + id + '_hidden'] = localStorage.getItem('igec_pt_' + id + '_hidden') || 'false';
+        });
+
+        // Backup example visibility
+        backup['igec_pt_example_visible'] = localStorage.getItem('igec_pt_example_visible') || 'false';
+
+        // Create a timestamped backup file
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+        const backupData = JSON.stringify(backup, null, 2);
+        const blob = new Blob([backupData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `prompt_backup_${timestamp}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        announce('Cópia de segurança JSON criada com sucesso.');
+    }
+
+    function restoreCacheJSON() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const backup = JSON.parse(event.target.result);
+
+                    // Restore all data
+                    Object.keys(backup).forEach(key => {
+                        if (backup[key]) {
+                            localStorage.setItem(key, backup[key]);
+                        } else {
+                            localStorage.removeItem(key);
+                        }
+                    });
+
+                    // Reload the page to apply restored data
+                    window.location.reload();
+                } catch (error) {
+                    announce('Erro ao restaurar a cópia de segurança. Ficheiro inválido.');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    function backupCacheMD() {
+        const timestamp = new Date().toISOString().split('T')[0];
+        const time = new Date().toLocaleTimeString('pt-PT');
+        const lines = [
+            `# Prompt Backup — ${timestamp} ${time}`,
+            ``
+        ];
+
+        // Draft
+        const draft = document.getElementById('draft').value || '';
+        lines.push(`## Pedido Inicial (para referência)`);
+        lines.push(draft || '*(vazio)*');
+        lines.push(``);
+
+        // Persona
+        const personaRole = document.getElementById('persona_role').value || '';
+        const persona = document.getElementById('persona').value || '';
+        lines.push(`## Persona/Papel`);
+        if (personaRole) lines.push(`**Cargo:** ${personaRole}`);
+        lines.push(persona || '*(vazio)*');
+        lines.push(``);
+
+        // Context
+        const context = document.getElementById('context').value || '';
+        lines.push(`## Contexto`);
+        lines.push(context || '*(vazio)*');
+        lines.push(``);
+
+        // Objective
+        const objective = document.getElementById('objective').value || '';
+        lines.push(`## Objetivo`);
+        lines.push(objective || '*(vazio)*');
+        lines.push(``);
+
+        // Audience
+        const audBoxWrap = document.getElementById('audience_checks');
+        const chosen = audBoxWrap ? Array.from(audBoxWrap.querySelectorAll('input[type="checkbox"]:checked')).map(o => o.value) : [];
+        const audience = document.getElementById('audience').value || '';
+        lines.push(`## Audiência`);
+        if (chosen.length > 0) {
+            lines.push(`**Seleção:** ${chosen.join('; ')}`);
+            if (audience) lines.push(``);
+        }
+        lines.push(audience || '*(vazio)*');
+        lines.push(``);
+
+        // Boundaries & Style
+        const styleSelect = document.getElementById('boundaries_style');
+        const style = styleSelect ? styleSelect.value : '';
+        const boundaries = document.getElementById('boundaries').value || '';
+        lines.push(`## Limites & Estilo`);
+        if (style) lines.push(`**Estilo:** ${style}`);
+        lines.push(boundaries || '*(vazio)*');
+        lines.push(``);
+
+        // Example (if visible)
+        const exampleVisible = document.getElementById('example-container').style.display !== 'none';
+        if (exampleVisible) {
+            const example = document.getElementById('example').value || '';
+            lines.push(`## Exemplo`);
+            lines.push(example || '*(vazio)*');
+            lines.push(``);
+        }
+
+        const mdContent = lines.join('\n');
+        const blob = new Blob([mdContent], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `prompt_backup_${timestamp.replace(/-/g, '')}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        announce('Cópia de segurança Markdown criada com sucesso.');
+    }
+
+    function restoreCacheMD() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.md';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const mdContent = event.target.result;
+                    const sections = {};
+                    let currentSection = null;
+                    let currentContent = [];
+
+                    const lines = mdContent.split('\n');
+                    lines.forEach((line) => {
+                        if (line.startsWith('## ')) {
+                            if (currentSection) {
+                                sections[currentSection] = currentContent.join('\n').trim();
+                            }
+                            currentSection = line.replace('## ', '').trim();
+                            currentContent = [];
+                        } else if (currentSection) {
+                            currentContent.push(line);
+                        }
+                    });
+                    if (currentSection) {
+                        sections[currentSection] = currentContent.join('\n').trim();
+                    }
+
+                    // Restore data
+                    document.getElementById('draft').value = sections['Pedido Inicial (para referência)'] || '';
+
+                    const personaSection = (sections['Persona/Papel'] || '').split('\n');
+                    const cargoLine = personaSection.find(line => line.startsWith('**Cargo:**'));
+                    if (cargoLine) {
+                        const cargo = cargoLine.replace('**Cargo:** ', '').trim();
+                        document.getElementById('persona_role').value = cargo;
+                    }
+                    const personaText = personaSection.filter(line => !line.startsWith('**Cargo:**')).join('\n').trim();
+                    document.getElementById('persona').value = personaText === '*(vazio)*' ? '' : personaText;
+
+                    document.getElementById('context').value = (sections['Contexto'] || '').replace('*(vazio)*', '').trim();
+                    document.getElementById('objective').value = (sections['Objetivo'] || '').replace('*(vazio)*', '').trim();
+                    document.getElementById('boundaries').value = (sections['Limites & Estilo'] || '').replace(/\*\*Estilo:\*\*.*?\n?/g, '').replace('*(vazio)*', '').trim();
+
+                    const styleSection = sections['Limites & Estilo'] || '';
+                    const styleLine = styleSection.match(/\*\*Estilo:\*\* (.+)/);
+                    if (styleLine) {
+                        document.getElementById('boundaries_style').value = styleLine[1].trim();
+                    }
+
+                    const audienceSection = (sections['Audiência'] || '').split('\n');
+                    const selectionLine = audienceSection.find(line => line.startsWith('**Seleção:**'));
+                    if (selectionLine) {
+                        const selected = selectionLine.replace('**Seleção:** ', '').split('; ');
+                        const checkboxes = document.getElementById('audience_checks').querySelectorAll('input[type="checkbox"]');
+                        checkboxes.forEach(cb => {
+                            cb.checked = selected.includes(cb.value);
+                        });
+                    }
+                    const audienceText = audienceSection.filter(line => !line.startsWith('**Seleção:**')).join('\n').trim();
+                    document.getElementById('audience').value = audienceText === '*(vazio)*' ? '' : audienceText;
+
+                    if (sections['Exemplo']) {
+                        document.getElementById('example-container').style.display = 'block';
+                        const btn = document.getElementById('example-toggle-btn');
+                        btn.textContent = '− Remover Exemplo';
+                        btn.classList.add('active');
+                        btn.setAttribute('aria-expanded', 'true');
+                        document.getElementById('example').value = sections['Exemplo'].replace('*(vazio)*', '').trim();
+                    }
+
+                    // Trigger updates
+                    updatePreview();
+                    fields.forEach(id => saveLocal(id));
+
+                    announce('Importação Markdown concluída com sucesso.');
+                } catch (error) {
+                    announce('Erro ao importar o ficheiro Markdown. Ficheiro inválido.');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
     }
 </script>
 
