@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checklist de Segurança - Laboratórios Escolares (IGEC)</title>
+  <style>
+    :root{--primary:#0b5cab;--accent:#136f63;--bg:#f7f9fc;--ink:#222;--muted:#666;--border:#d8dee9}
+    html,body{margin:0;padding:0;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    header{background:var(--primary);color:#fff;padding:16px 20px}
+    header h1{margin:0;font-size:20px}
+    header p{margin:4px 0 0 0;font-size:12px;opacity:.9}
+    main{max-width:980px;margin:20px auto;padding:0 16px 64px}
+    .panel{background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden}
+    .panel h2{margin:0;padding:12px 14px;font-size:16px;background:#eef3fb;border-bottom:1px solid var(--border)}
+    .panel .inner{padding:12px 14px}
+    fieldset{border:1px dashed var(--border);border-radius:6px;margin:12px 0;padding:10px}
+    legend{font-weight:600;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+    .item{display:flex;align-items:flex-start;gap:8px;padding:6px 4px}
+    .item label{flex:1}
+    .obs{width:100%;min-height:60px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .row > *{flex:1 1 240px}
+    .small{font-size:12px;color:var(--muted)}
+    .actions{position:sticky;bottom:0;left:0;right:0;background:rgba(255,255,255,.98);border-top:1px solid var(--border);padding:10px 16px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+    button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:10px 14px;font-weight:600;cursor:pointer}
+    button.secondary{background:#e5e9f0;color:#111}
+    .badge{display:inline-block;background:#fff2b2;color:#6b5900;padding:2px 6px;border-radius:4px;border:1px solid #ffe58f;font-size:12px}
+    .hidden{display:none}
+    .muted{color:#666}
+    .link{color:#0b5cab;cursor:pointer;text-decoration:underline}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CHECKLIST DE SEGURANÇA — Laboratórios Escolares</h1>
+    <p>IGEC – Inspeção-Geral da Educação e Ciência · Decreto-Lei n.º 102/84 · Portaria n.º 564/92</p>
+  </header>
+  <main>
+    <div class="panel">
+      <h2>1. Enquadramento</h2>
+      <div class="inner small">
+        Esta checklist destina-se a apoiar ações inspetivas e relatórios à Comunidade Educativa.
+        <span id="restorePrompt" class="hidden"> · <span class="link">Encontrada cópia local — clicar para restaurar</span></span>
+      </div>
+    </div>
+
+    <form id="formChecklist">
+      <div class="panel">
+        <h2>Dados Gerais</h2>
+        <div class="inner">
+          <div class="row">
+            <label>Estabelecimento de ensino<br><input name="escola" required style="width:100%"></label>
+            <label>Laboratório / Espaço<br><input name="laboratorio" style="width:100%"></label>
+            <label>Data<br><input name="data" type="date" style="width:100%"></label>
+            <label>Inspetor(a) responsável<br><input name="inspetor" style="width:100%"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>CHECKLIST DE VERIFICAÇÃO <span class="badge">Assinale: Conforme / Não Conforme / Não Aplicável</span></h2>
+        <div class="inner">
+          <!-- I Organização e Gestão da Segurança -->
+          <fieldset>
+            <legend>I. Organização e Gestão da Segurança</legend>
+            <div class="grid">
+              <div class="item"><select name="I1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Existe responsável designado pela segurança do laboratório.</label></div>
+              <div class="item"><select name="I2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Existe regulamento interno de utilização do laboratório, atualizado e divulgado.</label></div>
+              <div class="item"><select name="I3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Está disponível avaliação de riscos específica para atividades laboratoriais.</label></div>
+              <div class="item"><select name="I4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Existe Plano de Prevenção de Riscos atualizado.</label></div>
+              <div class="item"><select name="I5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Está implementado Plano de Emergência Interno, afixado em local visível.</label></div>
+              <div class="item"><select name="I6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>São realizados simulacros periódicos envolvendo cenários laboratoriais.</label></div>
+              <div class="item"><select name="I7"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Existe registo documental de ações de formação em segurança.</label></div>
+              <div class="item"><select name="I8"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Existe registo de ocorrências/acidentes laboratoriais.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="I_obs"></textarea></label>
+          </fieldset>
+
+          <!-- II Instalações e Infraestruturas -->
+          <fieldset>
+            <legend>II. Instalações e Infraestruturas</legend>
+            <div class="grid">
+              <div class="item"><select name="II1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Condições de conservação (paredes, pavimento, teto).</label></div>
+              <div class="item"><select name="II2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Pavimento antiderrapante e em bom estado.</label></div>
+              <div class="item"><select name="II3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Bancadas estáveis e resistentes a agentes químicos.</label></div>
+              <div class="item"><select name="II4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Ventilação natural adequada.</label></div>
+              <div class="item"><select name="II5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Sistema de ventilação/exaustão mecânica quando aplicável.</label></div>
+              <div class="item"><select name="II6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Iluminação suficiente e funcional.</label></div>
+              <div class="item"><select name="II7"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Instalações elétricas protegidas; tomadas em bom estado.</label></div>
+              <div class="item"><select name="II8"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Interruptor geral de corte de energia acessível.</label></div>
+              <div class="item"><select name="II9"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Corte geral de gás claramente identificado.</label></div>
+              <div class="item"><select name="II10"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Saídas de emergência desobstruídas.</label></div>
+              <div class="item"><select name="II11"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Portas abrem no sentido da evacuação.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="II_obs"></textarea></label>
+          </fieldset>
+
+          <!-- III Equipamentos de Emergência -->
+          <fieldset>
+            <legend>III. Equipamentos de Emergência</legend>
+            <div class="grid">
+              <div class="item"><select name="III1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Extintores adequados ao risco (pó químico/CO₂).</label></div>
+              <div class="item"><select name="III2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Extintores com inspeção periódica válida.</label></div>
+              <div class="item"><select name="III3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Manta ignífuga disponível.</label></div>
+              <div class="item"><select name="III4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Chuveiro de emergência funcional.</label></div>
+              <div class="item"><select name="III5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Lava-olhos funcional.</label></div>
+              <div class="item"><select name="III6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Caixa de primeiros socorros equipada.</label></div>
+              <div class="item"><select name="III7"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Lista de contactos de emergência afixada.</label></div>
+              <div class="item"><select name="III8"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Sinalização de segurança conforme legislação.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="III_obs"></textarea></label>
+          </fieldset>
+
+          <!-- IV Armazenamento de Produtos Químicos -->
+          <fieldset>
+            <legend>IV. Armazenamento de Produtos Químicos</legend>
+            <div class="grid">
+              <div class="item"><select name="IV1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Inventário atualizado de reagentes.</label></div>
+              <div class="item"><select name="IV2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Produtos devidamente rotulados (nome, perigos, pictogramas).</label></div>
+              <div class="item"><select name="IV3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Fichas de Dados de Segurança (FDS) disponíveis.</label></div>
+              <div class="item"><select name="IV4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Armazenamento por classes de compatibilidade química.</label></div>
+              <div class="item"><select name="IV5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Separação de ácidos e bases.</label></div>
+              <div class="item"><select name="IV6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Inflamáveis em armário apropriado.</label></div>
+              <div class="item"><select name="IV7"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Produtos tóxicos identificados e com acesso controlado.</label></div>
+              <div class="item"><select name="IV8"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Quantidades adequadas às necessidades pedagógicas.</label></div>
+              <div class="item"><select name="IV9"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Resíduos químicos em recipientes próprios e identificados.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="IV_obs"></textarea></label>
+          </fieldset>
+
+          <!-- V Equipamentos de Proteção Individual -->
+          <fieldset>
+            <legend>V. Equipamentos de Proteção Individual (EPI)</legend>
+            <div class="grid">
+              <div class="item"><select name="V1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Batas de laboratório para alunos e docentes.</label></div>
+              <div class="item"><select name="V2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Óculos de proteção em número suficiente.</label></div>
+              <div class="item"><select name="V3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Luvas adequadas às atividades.</label></div>
+              <div class="item"><select name="V4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Máscaras/respiradores quando aplicável.</label></div>
+              <div class="item"><select name="V5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Utilização efetiva e supervisionada de EPI.</label></div>
+              <div class="item"><select name="V6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Normas afixadas sobre uso obrigatório de EPI.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="V_obs"></textarea></label>
+          </fieldset>
+
+          <!-- VI Procedimentos Pedagógicos e Supervisão -->
+          <fieldset>
+            <legend>VI. Procedimentos Pedagógicos e Supervisão</legend>
+            <div class="grid">
+              <div class="item"><select name="VI1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>N.º de alunos por turma adequado à capacidade do laboratório.</label></div>
+              <div class="item"><select name="VI2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Supervisão permanente por docente.</label></div>
+              <div class="item"><select name="VI3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Instruções de segurança antes das experiências.</label></div>
+              <div class="item"><select name="VI4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Proibição de alimentos e bebidas no laboratório.</label></div>
+              <div class="item"><select name="VI5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Regras para manipulação de substâncias perigosas.</label></div>
+              <div class="item"><select name="VI6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Proibição de pipetagem com a boca.</label></div>
+              <div class="item"><select name="VI7"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Procedimentos para derrames acidentais.</label></div>
+              <div class="item"><select name="VI8"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Procedimentos para queimaduras ou contacto químico.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="VI_obs"></textarea></label>
+          </fieldset>
+
+          <!-- VII Gestão de Resíduos -->
+          <fieldset>
+            <legend>VII. Gestão de Resíduos</legend>
+            <div class="grid">
+              <div class="item"><select name="VII1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Separação de resíduos químicos de resíduos comuns.</label></div>
+              <div class="item"><select name="VII2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Contentores específicos identificados para resíduos perigosos.</label></div>
+              <div class="item"><select name="VII3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Protocolo de recolha por entidade licenciada, quando aplicável.</label></div>
+              <div class="item"><select name="VII4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Registo de eliminação de resíduos perigosos.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="VII_obs"></textarea></label>
+          </fieldset>
+
+          <!-- VIII Documentação Obrigatória -->
+          <fieldset>
+            <legend>VIII. Documentação Obrigatória</legend>
+            <div class="grid">
+              <div class="item"><select name="VIII1"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Regulamento interno do laboratório.</label></div>
+              <div class="item"><select name="VIII2"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Registos de manutenção de equipamentos.</label></div>
+              <div class="item"><select name="VIII3"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Certificados de inspeção de extintores.</label></div>
+              <div class="item"><select name="VIII4"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Registo de formação em segurança.</label></div>
+              <div class="item"><select name="VIII5"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Plano de Emergência Interno atualizado.</label></div>
+              <div class="item"><select name="VIII6"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Avaliação de riscos documentada.</label></div>
+              <div class="item"><select name="VIII7"><option></option><option>Conforme</option><option>Não Conforme</option><option>Não Aplicável</option></select><label>Seguro escolar válido.</label></div>
+            </div>
+            <label>Observações<br><textarea class="obs" name="VIII_obs"></textarea></label>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Síntese para Relatório à Comunidade Educativa</h2>
+        <div class="inner">
+          <div class="row">
+            <label>Grau global de conformidade<br>
+              <select name="grau">
+                <option></option>
+                <option>Elevado</option>
+                <option>Satisfatório</option>
+                <option>Necessita Melhoria</option>
+                <option>Não Conforme</option>
+              </select>
+            </label>
+            <label>Prazo para regularização<br><input name="prazo" type="date" style="width:100%"></label>
+            <label>Responsáveis pela implementação<br><input name="responsaveis" style="width:100%"></label>
+          </div>
+          <label>Principais não conformidades<br><textarea class="obs" name="nao_conformidades"></textarea></label>
+          <label>Medidas corretivas recomendadas<br><textarea class="obs" name="medidas"></textarea></label>
+          <label>Necessidades de formação identificadas<br><textarea class="obs" name="formacao"></textarea></label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Considerações Finais</h2>
+        <div class="inner small">
+          A utilização sistemática desta checklist contribui para a prevenção de acidentes e a melhoria contínua das condições de segurança.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Validação</h2>
+        <div class="inner row">
+          <label>O Inspetor(a)<br><input name="inspetor_nome" placeholder="Nome completo" style="width:100%"></label>
+          <label>Data<br><input name="assinatura_data" type="date" style="width:100%"></label>
+          <label>Assinatura (opcional)<br><input name="assinatura" placeholder="Digite o nome para representar a assinatura" style="width:100%"></label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary" id="btnReset">Limpar formulário</button>
+        <button type="button" id="btnExport">Word (.doc)</button>
+        <button type="button" id="btnExportXlsx">Excel (.xlsx)</button>
+        <span id="xlsxStatus" class="muted" title="Estado do carregamento da biblioteca XLSX"></span>
+        <span style="flex:1 1 auto"></span>
+        <button type="button" id="btnSaveCache" title="Guardar cópia local (cache)">Guardar Cópia</button>
+        <button type="button" id="btnRestoreCache" class="secondary" title="Restaurar a partir da cópia local">Restaurar</button>
+        <button type="button" id="btnClearCache" class="secondary" title="Apagar cópia local">Apagar Cópia</button>
+        <button type="button" id="btnExportBackup" class="secondary" title="Exportar cópia em ficheiro JSON">Exportar Backup</button>
+        <button type="button" id="btnImportBackup" class="secondary" title="Importar cópia de um ficheiro JSON">Importar Backup</button>
+        <input type="file" id="inputImport" accept="application/json" class="hidden" />
+        <span id="cacheStatus" class="muted"></span>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // ------- Utilidades comuns -------
+    const form = document.getElementById('formChecklist');
+    const statusEl = document.getElementById('xlsxStatus');
+    const cacheStatus = document.getElementById('cacheStatus');
+    const restorePrompt = document.getElementById('restorePrompt');
+
+    const qsa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const val = (name) => {
+      const el = form.elements[name];
+      if (!el) return '';
+      if (el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return el.value || '';
+      return '';
+    };
+    const setVal = (name, v) => {
+      const el = form.elements[name];
+      if (!el) return;
+      if (el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.value = v ?? '';
+    };
+    const sanitizeFile = (s) => (s || '').normalize('NFKD').replace(/[^\w\-]+/g,'_');
+
+    // ------- Excel (XLSX) carregamento dinâmico + fallback CSV -------
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src; s.async = true; s.defer = true;
+        s.onload = () => resolve(src);
+        s.onerror = () => reject(new Error('Falha ao carregar: ' + src));
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ensureXLSX() {
+      if (window.XLSX && XLSX.utils) return true;
+      statusEl.textContent = 'A carregar biblioteca Excel…';
+      const candidates = [
+        'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js',
+        'https://unpkg.com/xlsx@0.20.2/dist/xlsx.full.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+      ];
+      for (const url of candidates) {
+        try {
+          await loadScript(url);
+          if (window.XLSX && XLSX.utils) {
+            statusEl.textContent = 'Biblioteca Excel carregada.';
+            return true;
+          }
+        } catch(e) {}
+      }
+      statusEl.textContent = 'Não foi possível carregar a biblioteca Excel.';
+      return false;
+    }
+
+    // ------- Export Word (.doc) -------
+    document.getElementById('btnExport').addEventListener('click', () => {
+      const linhaSelect = (sel) => {
+        const label = sel.closest('.item')?.querySelector('label')?.textContent?.trim() || sel.name;
+        const v = sel.value || '-';
+        return `<tr><td style="width:65%">${label}</td><td style="width:35%">${v}</td></tr>`;
+      };
+      const buildSection = (legendText, fieldset) => {
+        const rows = qsa('select', fieldset).map(linhaSelect).join('');
+        const obs = fieldset.querySelector('textarea')?.value || '';
+        return `
+          <h3>${legendText}</h3>
+          <table border="1" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse">
+            <thead><tr><th>Item</th><th>Estado</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <p><strong>Observações:</strong><br>${obs ? obs.replace(/\n/g,'<br>') : '<em>—</em>'}</p>
+        `;
+      };
+      const sections = qsa('fieldset').map(fs => {
+        const lg = fs.querySelector('legend')?.textContent?.trim() || '';
+        return buildSection(lg, fs);
+      }).join('\n');
+
+      const cabecalho = `
+        <table width="100%" cellspacing="0" cellpadding="4">
+          <tr><td><strong>Estabelecimento:</strong> ${val('escola')}</td><td><strong>Laboratório:</strong> ${val('laboratorio')}</td></tr>
+          <tr><td><strong>Data:</strong> ${val('data')}</td><td><strong>Inspetor(a):</strong> ${val('inspetor')}</td></tr>
+        </table>`;
+
+      const sintese = `
+        <h3>Síntese</h3>
+        <table border="1" cellspacing="0" cellpadding="6" width="100%" style="border-collapse:collapse;margin-bottom:8px">
+          <tr><td><strong>Grau global de conformidade</strong></td><td>${val('grau') || '-'}</td></tr>
+          <tr><td><strong>Prazo para regularização</strong></td><td>${val('prazo') || '-'}</td></tr>
+          <tr><td><strong>Responsáveis</strong></td><td>${val('responsaveis') || '-'}</td></tr>
+        </table>
+        <p><strong>Principais não conformidades</strong><br>${(val('nao_conformidades') || '').replace(/\n/g,'<br>') || '<em>—</em>'}</p>
+        <p><strong>Medidas corretivas recomendadas</strong><br>${(val('medidas') || '').replace(/\n/g,'<br>') || '<em>—</em>'}</p>
+        <p><strong>Necessidades de formação</strong><br>${(val('formacao') || '').replace(/\n/g,'<br>') || '<em>—</em>'}</p>
+      `;
+
+      const validacao = `
+        <h3>Validação</h3>
+        <table width="100%" cellspacing="0" cellpadding="6">
+          <tr><td><strong>O Inspetor(a):</strong> ${val('inspetor_nome')}</td><td><strong>Data:</strong> ${val('assinatura_data')}</td></tr>
+          <tr><td colspan="2"><strong>Assinatura:</strong> ${val('assinatura')}</td></tr>
+        </table>
+      `;
+
+      const docHTML = `<!DOCTYPE html>
+        <html><head><meta charset=\"UTF-8\"><title>Checklist IGEC</title>
+        <style>
+          body{font-family:Calibri,Arial,sans-serif;font-size:12pt;color:#111}
+          h1{font-size:18pt;margin-bottom:0}
+          h2{font-size:14pt;margin:18px 0 6px}
+          h3{font-size:12.5pt;margin:14px 0 6px}
+          table{margin:8px 0}
+          th,td{vertical-align:top}
+        </style>
+        </head><body>
+        <h1>CHECKLIST DE SEGURANÇA — Laboratórios Escolares</h1>
+        <p><em>IGEC – Inspeção-Geral da Educação e Ciência · Decreto-Lei n.º 102/84 · Portaria n.º 564/92</em></p>
+        ${cabecalho}
+        ${sections}
+        ${sintese}
+        ${validacao}
+        <p><em>Documento gerado automaticamente a partir do formulário.</em></p>
+        </body></html>`;
+
+      const blob = new Blob(["\ufeff" + docHTML], {type: 'application/msword'});
+      const url = URL.createObjectURL(blob);
+      const escola = sanitizeFile(val('escola') || 'Escola');
+      const data = val('data') || new Date().toISOString().slice(0,10);
+      const filename = `Checklist_IGEC_${escola}_${data}.doc`;
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+    });
+
+    function buildAOA() {
+      const aoa = [];
+      const push = (row) => aoa.push(row.map(x => x === undefined || x === null ? '' : String(x)));
+      push(['CHECKLIST DE SEGURANÇA — Laboratórios Escolares']);
+      push(['IGEC – Inspeção-Geral da Educação e Ciência · Decreto-Lei n.º 102/84 · Portaria n.º 564/92']);
+      push([]);
+      push(['Estabelecimento', val('escola'), 'Laboratório', val('laboratorio')]);
+      push(['Data', val('data'), 'Inspetor(a)', val('inspetor')]);
+      push([]);
+      qsa('fieldset').forEach(fs => {
+        const legend = fs.querySelector('legend')?.textContent?.trim() || 'Secção';
+        push([legend]);
+        push(['Item','Estado']);
+        qsa('select', fs).forEach(sel => {
+          const label = sel.closest('.item')?.querySelector('label')?.textContent?.trim() || sel.name;
+          const estado = sel.value || '-';
+          push([label, estado]);
+        });
+        const obs = fs.querySelector('textarea')?.value || '';
+        push(['Observações', obs]);
+        push([]);
+      });
+      push(['Síntese']);
+      push(['Grau global de conformidade', val('grau') || '-']);
+      push(['Prazo para regularização', val('prazo') || '-']);
+      push(['Responsáveis', val('responsaveis') || '-']);
+      push(['Principais não conformidades', val('nao_conformidades') || '']);
+      push(['Medidas corretivas recomendadas', val('medidas') || '']);
+      push(['Necessidades de formação', val('formacao') || '']);
+      push([]);
+      push(['Validação']);
+      push(['O Inspetor(a)', val('inspetor_nome') || '']);
+      push(['Data', val('assinatura_data') || '']);
+      push(['Assinatura', val('assinatura') || '']);
+      return aoa;
+    }
+
+    function exportCsv() {
+      const aoa = buildAOA();
+      const sep = ';'; // separador compatível com PT
+      const escape = (s) => {
+        s = (s ?? '').toString();
+        if (s.includes('"')) s = s.replace(/"/g, '""');
+        if (s.includes(sep) || s.includes('\n')) s = `"${s}"`;
+        return s;
+      };
+      const csv = aoa.map(row => row.map(escape).join(sep)).join('\n');
+      const blob = new Blob(["\ufeff" + csv], {type: 'text/csv;charset=utf-8;'});
+      const a = document.createElement('a');
+      const escola = sanitizeFile(val('escola') || 'Escola');
+      const data = val('data') || new Date().toISOString().slice(0,10);
+      a.href = URL.createObjectURL(blob);
+      a.download = `Checklist_IGEC_${escola}_${data}.csv`;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+    }
+
+    document.getElementById('btnExportXlsx').addEventListener('click', async () => {
+      const ok = await ensureXLSX();
+      if (!ok) {
+        const usarCsv = confirm('Biblioteca XLSX não carregada. Pretende exportar em CSV (compatível com Excel)?');
+        if (usarCsv) exportCsv();
+        return;
+      }
+      const aoa = buildAOA();
+      const ws = XLSX.utils.aoa_to_sheet(aoa);
+      const colWidths = [];
+      aoa.forEach(row => row.forEach((cell, i) => {
+        const len = (cell ? String(cell) : '').length;
+        colWidths[i] = Math.max(colWidths[i] || 10, Math.min(60, len + 2));
+      }));
+      ws['!cols'] = colWidths.map(w => ({wch:w}));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Checklist');
+      const escola = sanitizeFile(val('escola') || 'Escola');
+      const data = val('data') || new Date().toISOString().slice(0,10);
+      XLSX.writeFile(wb, `Checklist_IGEC_${escola}_${data}.xlsx`);
+    });
+
+    // ------- Cache de dados do formulário (localStorage + JSON) -------
+    const CACHE_KEY = 'igec_checklist_cache_v1';
+
+    function lsAvailable() {
+      try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; } catch(e){ return false; }
+    }
+
+    function serializeForm() {
+      const data = { version: 1, ts: Date.now(), fields: {} };
+      qsa('input, select, textarea', form).forEach(el => {
+        if (!el.name) return;
+        data.fields[el.name] = el.value || '';
+      });
+      return data;
+    }
+
+    function applyData(data) {
+      if (!data || !data.fields) return;
+      Object.keys(data.fields).forEach(k => setVal(k, data.fields[k]));
+    }
+
+    function saveCache(showToast=true) {
+      if (!lsAvailable()) { cacheStatus.textContent = 'Cache local desativada no navegador.'; return; }
+      const data = serializeForm();
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      if (showToast) {
+        const time = new Date(data.ts).toLocaleTimeString();
+        cacheStatus.textContent = `Cópia guardada às ${time}`;
+        setTimeout(()=>{ cacheStatus.textContent = ''; }, 4000);
+      }
+    }
+
+    function loadCache() {
+      if (!lsAvailable()) return null;
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch(e){ return null; }
+    }
+
+    function restoreCache() {
+      const data = loadCache();
+      if (!data) { alert('Não foi encontrada nenhuma cópia local.'); return; }
+      applyData(data);
+      cacheStatus.textContent = 'Cópia local restaurada';
+      setTimeout(()=>{ cacheStatus.textContent = ''; }, 3000);
+    }
+
+    function clearCache() {
+      if (!lsAvailable()) return;
+      localStorage.removeItem(CACHE_KEY);
+      cacheStatus.textContent = 'Cópia local apagada';
+      setTimeout(()=>{ cacheStatus.textContent = ''; }, 3000);
+    }
+
+    // Auto‑guardar (debounce)
+    let saveTimer = null;
+    const scheduleSave = () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => saveCache(false), 500);
+    };
+    form.addEventListener('input', scheduleSave);
+    form.addEventListener('change', scheduleSave);
+    window.addEventListener('beforeunload', () => { try { saveCache(false); } catch(e){} });
+
+    // Controlo de botões
+    document.getElementById('btnSaveCache').addEventListener('click', () => saveCache(true));
+    document.getElementById('btnRestoreCache').addEventListener('click', restoreCache);
+    document.getElementById('btnClearCache').addEventListener('click', () => {
+      if (confirm('Apagar a cópia local?')) clearCache();
+    });
+
+    // Exportar / Importar backup JSON
+    document.getElementById('btnExportBackup').addEventListener('click', () => {
+      const data = serializeForm();
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const a = document.createElement('a');
+      const escola = sanitizeFile(val('escola') || 'Escola');
+      const dataStr = (val('data') || new Date().toISOString().slice(0,10));
+      a.href = URL.createObjectURL(blob);
+      a.download = `Checklist_IGEC_backup_${escola}_${dataStr}.json`;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+    });
+
+    const inputImport = document.getElementById('inputImport');
+    document.getElementById('btnImportBackup').addEventListener('click', () => inputImport.click());
+    inputImport.addEventListener('change', (ev) => {
+      const file = ev.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!data || !data.fields) throw new Error('Formato inválido');
+          if (confirm('Importar os dados do ficheiro e substituir o conteúdo atual do formulário?')) {
+            applyData(data);
+            saveCache(false);
+            cacheStatus.textContent = 'Backup importado e guardado localmente';
+            setTimeout(()=>{ cacheStatus.textContent = ''; }, 4000);
+          }
+        } catch(e){
+          alert('Não foi possível importar: ficheiro inválido.');
+        } finally {
+          ev.target.value = '';
+        }
+      };
+      reader.readAsText(file, 'utf-8');
+    });
+
+    // Mostrar aviso para restaurar se existir cópia
+    (function(){
+      const data = loadCache();
+      if (data) {
+        restorePrompt.classList.remove('hidden');
+        restorePrompt.querySelector('.link').addEventListener('click', restoreCache);
+      }
+    })();
+
+    // Pré-carregar XLSX de forma silenciosa
+    ensureXLSX();
+
+    // Limpar formulário original
+    document.getElementById('btnReset').addEventListener('click',() =>{
+      if(confirm('Tem a certeza que pretende limpar todos os campos?')){
+        form.reset();
+        // após reset, atualizar cache
+        saveCache(false);
+      }
+    });
+  </script>
+</body>
+</html>
