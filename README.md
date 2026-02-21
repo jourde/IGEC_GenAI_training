@@ -12,3 +12,4 @@ François Jourde - Digital Education Expert - [Office of the Secretary-General o
 - [Simple Prompt Builder](https://jourde.github.io/GenAI-training-IGEC/activities/simple-prompt-builder.html)
 - [Construtor de prompts para IGEC](https://jourde.github.io/GenAI-training-IGEC/activities/construtor_prompts_IGEC.html) (prototype)
 - [DigComp mapping interface](https://jourde.github.io/GenAI-training-IGEC/activities/digcomp_mapping.html)
+- [AILit mapping interface](https://jourde.github.io/GenAI-training-IGEC/activities/AILit-task-mapping.html)
