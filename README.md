@@ -9,7 +9,7 @@ François Jourde - Digital Education Expert - [Office of the Secretary-General o
 1. Open the slide deck interface [at this link](https://jourde.github.io/learning-designer/slidedeck.html).
 2. Upload the provided JSON file to the interface.
 ## Quick links
-- [Simple Prompt Builder](https://jourde.github.io/GenAI-training-IGEC/activities/simple-prompt-builder.html)
-- [Construtor de prompts para IGEC](https://jourde.github.io/GenAI-training-IGEC/activities/construtor_prompts_IGEC.html) (prototype)
-- [DigComp mapping interface](https://jourde.github.io/GenAI-training-IGEC/activities/digcomp_mapping.html)
-- [AILit mapping interface](https://jourde.github.io/GenAI-training-IGEC/activities/AILit-task-mapping.html)
+- [Simple Prompt Builder](https://jourde.github.io/2026_IGEC_GENAI/activities/simple-prompt-builder.html)
+- [Construtor de prompts para IGEC](https://jourde.github.io/2026_IGEC_GENAI/activities/construtor_prompts_IGEC.html) (prototype)
+- [DigComp mapping interface](https://jourde.github.io/2026_IGEC_GENAI/activities/digcomp_mapping.html)
+- [AILit mapping interface](https://jourde.github.io/2026_IGEC_GENAI/activities/AILit-task-mapping.html)
