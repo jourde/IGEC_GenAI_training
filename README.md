@@ -7,7 +7,7 @@ François Jourde - Digital Education Expert - [Office of the Secretary-General o
 
 ## Slide Deck
 1. Open the slide deck interface [at this link](https://jourde.github.io/learning-designer/slidedeck.html).
-2. Upload the provided [JSON file](https://github.com/jourde/GenAI-training-IGEC/blob/main/JSON/Generative_AI_for_professional_tasks_for_the_General_Inspectorate_of_Education_and_Science_(IGEC)_2026-02-22_16-01-21.json) to the interface.
+2. Upload the provided [JSON file](https://github.com/jourde/GenAI-training-IGEC/blob/main/JSON/GenAI_for_IGEC.json) to the interface.
 ## Quick links
 - [Simple Prompt Builder](https://jourde.github.io/GenAI-training-IGEC/activities/simple-prompt-builder.html)
 - [Construtor de prompts para IGEC](https://jourde.github.io/GenAI-training-IGEC/activities/construtor_prompts_IGEC.html) (prototype)
